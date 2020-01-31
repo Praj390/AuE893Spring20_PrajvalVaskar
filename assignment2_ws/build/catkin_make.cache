@@ -1,0 +1,2 @@
+assignment_2
+-DCATKIN_DEVEL_PREFIX=/home/prajval/AuE8930/git_ws/AuE893Spring20_PrajvalVaskar/assignment2_ws/devel -DCMAKE_INSTALL_PREFIX=/home/prajval/AuE8930/git_ws/AuE893Spring20_PrajvalVaskar/assignment2_ws/install -G Unix Makefiles
