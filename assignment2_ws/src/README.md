@@ -26,6 +26,10 @@ here the package name is assignment_2 and launch file name is turtlesim_withpara
 
 3. Square_closedloop.py
   	Task in this code is to make square using velocity control of 3*3 units of dimension. For this implementation of PID is done.
+To run the launch file, following command is used.
+	roslaunch assignment_2 square_closedloop.launch
+here the package name is assignment_2 and launch file name is turtlesim_withparams.launch
+
 
 Following are the screenshot of the programs
 
