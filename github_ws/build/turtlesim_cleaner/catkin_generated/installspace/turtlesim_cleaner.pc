@@ -1,0 +1,8 @@
+prefix=/home/prajval/AuE8930/git_ws/AuE893Spring20_PrajvalVaskar/github_ws/install
+
+Name: turtlesim_cleaner
+Description: Description of turtlesim_cleaner
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

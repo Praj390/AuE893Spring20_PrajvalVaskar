@@ -60,8 +60,8 @@ class TurtleBot:
         goal_pose = Pose()
 
 
-        x = [1,5,8,8,5,5]
-        y = [1,5,5,8,8,5]
+        x = [5.5,5,8,8,5,5]
+        y = [5.5,5,5,8,8,5]
 
         theta = [-3*pi/4,0,pi/2,pi,-pi/2,0]
         distance_tolerance = 0.01

@@ -1,0 +1,8 @@
+prefix=/home/prajval/AuE8930/git_ws/AuE893Spring20_PrajvalVaskar/github_ws/devel
+
+Name: assignment4_obstacleavoidance
+Description: Description of assignment4_obstacleavoidance
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

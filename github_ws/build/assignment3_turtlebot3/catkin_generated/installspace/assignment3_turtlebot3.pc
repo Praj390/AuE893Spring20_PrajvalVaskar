@@ -1,0 +1,8 @@
+prefix=/home/prajval/AuE8930/git_ws/AuE893Spring20_PrajvalVaskar/github_ws/install
+
+Name: assignment3_turtlebot3
+Description: Description of assignment3_turtlebot3
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
