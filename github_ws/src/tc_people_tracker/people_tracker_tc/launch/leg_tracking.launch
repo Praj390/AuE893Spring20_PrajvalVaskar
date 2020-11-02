@@ -1,0 +1,8 @@
+<launch>
+
+  <!-- Start navigation -->
+  <include file="$(find people_tracker_tc)/launch/leg_detector_start.launch" />
+  <!--include file="$(find my_people_tracker_pkg)/launch/track_leg.launch" /-->
+
+  <!--node name="AUE893_leg_tracker" pkg="my_people_tracker_pkg" type="trial_leg_detect.py" output="screen"/-->
+</launch>

@@ -1,0 +1,95 @@
+<launch>
+
+  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="multi_robot_name" default=""/>
+  <arg name="x_pos" default="-0.2"/>
+  <arg name="y_pos" default="1.6"/>
+  <arg name="z_pos" default="0"/>
+  <arg name="yaw_pos" default="3.14"/>
+
+
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find turtlebot3_auefinals)/worlds/turtlebot3_final.world" />
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+   <include file="$(find person_sim)/launch/init_small_standing_person.launch">
+   </include>
+
+   <include file="$(find turtle_tf_3d)/launch/person_standing_keyboard_move.launch">
+   </include>
+
+  <include file="$(find turtlebot3_bringup)/launch/includes/description.launch.xml">
+    <arg name="model" value="$(arg model)" />
+  </include>
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state">
+    <param name="publish_frequency" type="double" value="50.0" />
+    <param name="tf_prefix" value="$(arg multi_robot_name)"/>
+  </node>
+
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model turtlebot3_$(arg model) -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -Y $(arg yaw_pos) -param robot_description" />
+
+
+    <!-- Arguments -->
+ 
+  <arg name="slam_methods" default="gmapping"/>
+  <arg name="configuration_basename" default="turtlebot3_lds_2d.lua"/>
+  <arg name="open_rviz" default="true"/>
+
+  <!-- SLAM: Gmapping, Cartographer, Hector, Karto, Frontier_exploration, RTAB-Map -->
+  <include file="$(find turtlebot3_slam)/launch/turtlebot3_$(arg slam_methods).launch">
+    <arg name="model" value="$(arg model)"/>
+    <arg name="configuration_basename" value="$(arg configuration_basename)"/>
+  </include>
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find turtlebot3_slam)/rviz/turtlebot3_$(arg slam_methods).rviz"/>
+  </group>
+  
+  <arg name="scan" default="/scan" />
+  <arg name="machine" default="localhost" />
+  <arg name="user" default="" />
+  <!-- Leg Detector -->
+  <node pkg="leg_detector" type="leg_detector" name="leg_detector"
+args="scan:=$(arg scan) $(find
+leg_detector)/config/trained_leg_detector.yaml" respawn="true"
+output="screen">
+      <param name="fixed_frame" type="string" value="odom" />
+   </node>
+   <!-- To PoseArray -->
+   <include file="$(find
+detector_msg_to_pose_array)/launch/to_pose_array.launch">
+      <arg name="machine" value="$(arg machine)"/>
+      <arg name="user" value="$(arg user)"/>
+  </include>
+  <arg name="launch_prefix" default=""/>
+  <arg name="image" default="/camera/rgb/image_raw" />
+
+  <!-- Config and weights folder. -->
+  <arg name="yolo_weights_path"          default="$(find darknet_ros)/yolo_network_config/weights"/>
+  <arg name="yolo_config_path"           default="$(find darknet_ros)/yolo_network_config/cfg"/>
+
+  <!-- ROS and network parameter files -->
+  <arg name="ros_param_file"             default="$(find darknet_ros)/config/ros.yaml"/>
+  <arg name="network_param_file"         default="$(find darknet_ros)/config/yolov2-tiny.yaml"/>
+
+  <!-- Load parameters -->
+  <rosparam command="load" ns="darknet_ros" file="$(arg ros_param_file)"/>
+  <rosparam command="load" ns="darknet_ros" file="$(arg network_param_file)"/>
+
+  <!-- Start darknet and ros wrapper -->
+  <node pkg="darknet_ros" type="darknet_ros" name="darknet_ros" output="screen" launch-prefix="$(arg launch_prefix)">
+    <param name="weights_path"          value="$(arg yolo_weights_path)" />
+    <param name="config_path"           value="$(arg yolo_config_path)" />
+    <remap from="camera/rgb/image_raw"  to="$(arg image)" />
+  </node>
+  <node pkg="turtlebot3_auefinals" type="integrated.py" name="final_integration" />
+
+</launch>

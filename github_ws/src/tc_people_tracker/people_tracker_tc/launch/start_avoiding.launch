@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+  <!-- Start navigation -->
+  <include file="$(find people_tracker_tc)/launch/leg_detector_start.launch" />
+  <include file="$(find my_people_tracker_pkg)/launch/track_leg.launch" />
+
+  <!--node name="leg_" pkg="test_turtlebot" type="go_to_specific_point_on_map.py" output="screen"/-->
+</launch>
